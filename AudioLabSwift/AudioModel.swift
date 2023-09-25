@@ -13,17 +13,21 @@ class AudioModel {
     
     // MARK: Properties
     private var BUFFER_SIZE:Int
+	private var EQ_ARR_SIZE:Int
     // thse properties are for interfaceing with the API
     // the user can access these arrays at any time and plot them if they like
     var timeData:[Float]
     var fftData:[Float]
+	var eqData:[Float]
     
     // MARK: Public Methods
     init(buffer_size:Int) {
         BUFFER_SIZE = buffer_size
         // anything not lazily instatntiated should be allocated here
+		MAXIMA_ARR_SIZE = 20
         timeData = Array.init(repeating: 0.0, count: BUFFER_SIZE)
         fftData = Array.init(repeating: 0.0, count: BUFFER_SIZE/2)
+		eqData = Array.init(repeating: 0.0, count: EQ_ARR_SIZE)
     }
     
     // public function for starting processing of microphone data
