@@ -13,21 +13,23 @@ class AudioModel {
     
     // MARK: Properties
     private var BUFFER_SIZE:Int
-	private var EQ_ARR_SIZE:Int
+	private var MX_ARR_SIZE:Int
+	private var BATCH_SIZE:Int
     // thse properties are for interfaceing with the API
     // the user can access these arrays at any time and plot them if they like
     var timeData:[Float]
     var fftData:[Float]
-	var eqData:[Float]
+	var mxData:[Float]
     
     // MARK: Public Methods
     init(buffer_size:Int) {
         BUFFER_SIZE = buffer_size
+		MX_ARR_SIZE = 20
+		BATCH_SIZE = BUFFER_SIZE/MX_ARR_SIZE
         // anything not lazily instatntiated should be allocated here
-		MAXIMA_ARR_SIZE = 20
         timeData = Array.init(repeating: 0.0, count: BUFFER_SIZE)
         fftData = Array.init(repeating: 0.0, count: BUFFER_SIZE/2)
-		eqData = Array.init(repeating: 0.0, count: EQ_ARR_SIZE)
+		mxData = Array.init(repeating: 0.0, count: MX_ARR_SIZE)
     }
     
     // public function for starting processing of microphone data
@@ -91,6 +93,10 @@ class AudioModel {
             //   timeData: the raw audio samples
             //   fftData:  the FFT of those same samples
             // the user can now use these variables however they like
+			
+			for slice in stride(from: 0, to: fftData.count()-1, by: BATCH_SIZE) {
+				mxData[slice/BATCH_SIZE] = fftData[slice...slice+BATCH_SIZE-1].reduce(FLT_MIN, combine: max)
+			}
             
         }
     }
