@@ -27,6 +27,9 @@ class ViewController: UIViewController {
         return MetalGraph(userView: self.userView)
     }()
     
+    override func viewWillDisappear(_ animated: Bool) {
+        audio.pause()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,14 +47,19 @@ class ViewController: UIViewController {
             graph.addGraph(withName: "time",
                 numPointsInGraph: AudioConstants.AUDIO_BUFFER_SIZE)
 			
+            // Add in graph for displaying maximas of blocks from the FFT data
+            // Make sure to normalize since most values are extremely negative
 			graph.addGraph(withName: "maxima",
+                shouldNormalizeForFFT: true,
 				numPointsInGraph: AudioConstants.MAXIMA_SIZE)
             
             graph.makeGrids() // add grids to graph
         }
         
         // start up the audio model here, querying microphone
-        audio.startMicrophoneProcessing(withFps: 20) // preferred number of FFT calculations per second
+        // Commented out to implement Part Three
+        // audio.startMicrophoneProcessing(withFps: 20) // preferred number of FFT calculations per second
+        audio.playAudioFile()
 
         audio.play()
         
