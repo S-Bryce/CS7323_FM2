@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var userView: UIView!
     struct AudioConstants{
         static let AUDIO_BUFFER_SIZE = 1024*4
-		static let EQUALIZER_SIZE = 20
+		static let MAXIMA_SIZE = 20
     }
     
     // setup audio model
@@ -44,8 +44,8 @@ class ViewController: UIViewController {
             graph.addGraph(withName: "time",
                 numPointsInGraph: AudioConstants.AUDIO_BUFFER_SIZE)
 			
-			graph.addGraph(withName: "equalizer",
-				numPointsInGraph: AudioConstants.EQUALIZER_SIZE)
+			graph.addGraph(withName: "maxima",
+				numPointsInGraph: AudioConstants.MAXIMA_SIZE)
             
             graph.makeGrids() // add grids to graph
         }
@@ -75,6 +75,11 @@ class ViewController: UIViewController {
                 data: self.audio.timeData,
                 forKey: "time"
             )
+			
+			graph.updateGraph(
+				data: self.audio.mxData,
+				forKey: "maxima"
+			)
         }
         
     }
