@@ -1,0 +1,6 @@
+1. No, it would not. As it stands the fft graph has a number of points equal to the audio buffer/2 (with audio buffer == Nyquist frequency).
+Because of this, if the fft array expanded, it would be attempting to place more points onto the graph than the graph has allocated, which
+would cause an error. To correct for this, we would need to increase the numPointsInGraph for the fft graph to match the true size of the
+array. Other components would continue to work, as they are proportional to either fftData itself or the size fo the audio buffer.
+
+2.
